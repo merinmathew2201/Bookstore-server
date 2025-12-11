@@ -47,7 +47,7 @@ exports.loginController = async (req,res)=>{
     
 }
 // google login
-exports.loginController = async (req,res)=>{
+exports.googleLoginController = async (req,res)=>{
     console.log("Inside GoogleloginController");
     const {email,password,username,picture} = req.body
     console.log(email,password,username,picture);
