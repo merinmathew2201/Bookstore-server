@@ -40,9 +40,13 @@ exports.getHomeBookController = async (req,res)=>{
 // get userallBookspage - authorized user
 exports.getUserAllBooksController = async (req,res)=>{
     console.log("Inside getUserAllBooksController");
+    const searchKey = req.query.search
+    console.log(searchKey);
+    
+
     const loginUserMail = req.payload
     try{
-        const allBooks = await books.find({sellerMail:{$ne:loginUserMail}})
+        const allBooks = await books.find({sellerMail:{$ne:loginUserMail},title:{$regex:searchKey,$options:'i'}})
         res.status(200).json(allBooks)
     }catch(error){
         console.log(error);
