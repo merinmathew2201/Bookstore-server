@@ -91,4 +91,15 @@ exports.userProfileUpdateController = async (req,res)=>{
     }
 }
 
+// get all users
+exports.getAllUsersController = async (req,res)=>{
+    console.log("Inside getAllUsersController");
+    try{
+        const allUsers = await users.find({role:{$ne:"admin"}})
+        res.status(200).json(allUsers)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    } 
+}
 // admin profile edit

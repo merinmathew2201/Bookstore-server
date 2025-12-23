@@ -3,6 +3,7 @@ const userController = require('../controllers/userController')
 const bookController = require('../controllers/bookController')
 const jwtMiddleware = require('../middlewares/jwtMiddleware')
 const multerMiddleware = require('../middlewares/multerMiddleware')
+const adminMiddleware = require('../middlewares/adminMiddleware')
 
 const router = new express.Router()
 
@@ -19,11 +20,13 @@ router.post('/google-login',userController.googleLoginController)
 router.get('/home/books',bookController.getHomeBookController)
 
 
-// --------Authorised user
+// --------Authorised user---------
+// --------role-user-------
+
 // add book - request body in formdata,header should has token
 router.post('/user/add/book',jwtMiddleware,multerMiddleware.array('uploadImg',3) ,bookController.addBookController)
 
-// all books 
+// all user books 
 router.get('/all-books',jwtMiddleware,bookController.getUserAllBooksController)
 
 //user profile books 
@@ -37,5 +40,13 @@ router.put('/user/:id/edit',jwtMiddleware,multerMiddleware.single('picture') ,us
 
 // view book
 router.get('/books/:id/view',jwtMiddleware,bookController.viewBookController)
+
+// --------role-admin-------
+
+// all admin books 
+router.get('/books/all',adminMiddleware,bookController.getAllBooksController)
+
+// all users 
+router.get('/users/all',adminMiddleware,userController.getAllUsersController)
 
 module.exports = router
