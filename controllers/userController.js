@@ -103,3 +103,19 @@ exports.getAllUsersController = async (req,res)=>{
     } 
 }
 // admin profile edit
+exports.adminProfileUpdateController = async (req,res)=>{
+    console.log("Inside adminProfileUpdateController");
+    // get admin details
+    const email = req.payload
+    const {id} = req.params
+    const {username,password,bio,role,picture} = req.body
+    const updatePicture = req.file?req.file.filename:picture
+    console.log(id,email,username,password,bio,role,updatePicture);
+    try{
+        const updateAdmin = await users.findByIdAndUpdate({_id:id},{username,email,password,picture:updatePicture,bio,role},{new:true})
+        res.status(200).json(updateAdmin)
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)  
+    }
+}

@@ -49,4 +49,12 @@ router.get('/books/all',adminMiddleware,bookController.getAllBooksController)
 // all users 
 router.get('/users/all',adminMiddleware,userController.getAllUsersController)
 
+// update book status
+router.put('/books/:id/update',adminMiddleware,bookController.updateBookStatusController)
+
+// admin profile update
+router.put('/admin/:id/edit',adminMiddleware,multerMiddleware.single('picture') ,userController.adminProfileUpdateController)
+
+
+
 module.exports = router
