@@ -41,6 +41,9 @@ router.put('/user/:id/edit',jwtMiddleware,multerMiddleware.single('picture') ,us
 // view book
 router.get('/books/:id/view',jwtMiddleware,bookController.viewBookController)
 
+// delete book
+router.delete('/books/:id/',jwtMiddleware,bookController.deleteBookController)
+
 // --------role-admin-------
 
 // all admin books 
@@ -52,8 +55,7 @@ router.get('/users/all',adminMiddleware,userController.getAllUsersController)
 // update book status
 router.put('/books/:id/update',adminMiddleware,bookController.updateBookStatusController)
 
-// admin profile update
-router.put('/admin/:id/edit',adminMiddleware,multerMiddleware.single('picture') ,userController.adminProfileUpdateController)
+
 
 
 
