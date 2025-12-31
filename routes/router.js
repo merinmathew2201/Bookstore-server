@@ -44,6 +44,9 @@ router.get('/books/:id/view',jwtMiddleware,bookController.viewBookController)
 // delete book
 router.delete('/books/:id/',jwtMiddleware,bookController.deleteBookController)
 
+// buy book
+router.put('/books/:id/buy',jwtMiddleware,bookController.bookPaymentController)
+
 // --------role-admin-------
 
 // all admin books 

@@ -1,4 +1,5 @@
 const books = require('../model/bookModel')
+const stripe = require('stripe')(process.env.stripeSecret);
 
 // add book
 exports.addBookController = async (req,res)=>{
@@ -131,4 +132,49 @@ exports.deleteBookController = async (req,res)=>{
         console.log(error);
         res.status(500).json(error)
     } 
+}
+
+// book payment
+exports.bookPaymentController = async(req,res)=>{
+    console.log("Inside bookPaymentController");
+    // get bookdetails from id from url
+    const {id} = req.params
+    // get email from payload
+    const email = req.payload
+    try{
+        const bookDetails = await books.findById({_id:id})
+        bookDetails.status = "sold"
+        bookDetails.buyerMail = email
+        await bookDetails.save()
+        const line_items = [{
+            price_data:{
+                currency:'usd',
+                product_data:{
+                    name:bookDetails.title,
+                    description:`${bookDetails.author} | ${bookDetails.publisher}`,
+                    images:bookDetails.uploadImg,
+                    metadata:{
+                        title:bookDetails.title,author:bookDetails.author,imageURL:bookDetails.imageURL,price:bookDetails.price
+                    }
+                },
+                unit_amount:Math.round(bookDetails.discountPrice*100)
+            },
+            quantity:1
+        }]
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types:['card'],
+            line_items,
+            mode: 'payment',
+            success_url: 'http://localhost:5173/payment-success',
+            cancel_url: 'http://localhost:5173/payment-error'
+            });
+        console.log(session);
+        res.status(200).json({checkOutURL:session.url})
+            
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error)
+    }
+    
 }
